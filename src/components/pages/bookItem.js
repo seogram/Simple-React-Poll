@@ -1,17 +1,27 @@
 import React from 'react';
-import {Well , Row , Col , Button} from 'react-bootstrap';
+import {Well , Row , Col , Button,Image} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {addToCart,updateCart} from '../../actions/cartActions';
 import {deleteBook} from '../../actions/booksActions';
 
  class BookItem extends React.Component {
+   constructor() {
+     super();
+     this.state = {
+       isClicked : false
+     }
+   }
+   onReadMore() {
+     this.setState({isClicked:true})
+   }
    handleCart(){
      const Newcart = [...this.props.cart,{
        _id:this.props._id,
        title : this.props.title,
        description : this.props.description,
        price : this.props.price,
+       images : this.props.image,
        qty : 1
      }]
      if(this.props.cart.length){
@@ -22,7 +32,7 @@ import {deleteBook} from '../../actions/booksActions';
         if (cartIndex===-1){
           this.props.addToCart(Newcart);
         }else {
-          this.props.updateCart(_id,1)
+          this.props.updateCart(_id,1,this.props.cart);
         }
      }else {
        this.props.addToCart(Newcart);
@@ -30,18 +40,25 @@ import {deleteBook} from '../../actions/booksActions';
    }
 
    onDeleteBook(_id){
+
      this.props.deleteBook(_id);
    }
   render() {
     return (
       <Well>
 <Row>
-<Col xs={12} >
+<Col xs={8} >
 <strong>{this.props.title}</strong>
-<p>{this.props.description}</p>
+<p>{(this.state.isClicked===false && this.props.description.length >20)?(this.props.description.substring(0,20)):(this.props.description)}</p>
+<button className='link' onClick={this.onReadMore.bind(this)}>
+{(this.state.isClicked===false && this.props.description !=null && this.props.description.length >20 )?('read more..'):('')}
+</button>
 <h6>usd. {this.props.price}</h6>
 <Button onClick={this.handleCart.bind(this)} bsStyle='primary'>Buy Now</Button><span>      </span>
-<Button onClick={this.onDeleteBook.bind(this,this.props._id)} bsStyle='danger' >Delete</Button>
+
+</Col>
+<Col xs={4} >
+  <Image src={this.props.image} responsive />
 </Col>
 </Row>
       </Well>

@@ -1,11 +1,14 @@
 "use strict"
 import React from 'react';
 import {connect} from 'react-redux';
-import {Well , Col , Row , Button , Panel,Label,ButtonGroup ,Modal} from 'react-bootstrap';
+import {Well , Col , Row ,Image, Button , Panel,Label,ButtonGroup ,Modal} from 'react-bootstrap';
 import {bindActionCreators} from 'redux';
-import {deleteFromCart,updateCart} from '../../actions/cartActions';
+import {deleteFromCart,updateCart,getCart} from '../../actions/cartActions';
 
  class Cart extends React.Component {
+   componentDidMount(){
+this.props.getCart();
+}
  constructor() {
    super();
    this.state ={
@@ -33,12 +36,12 @@ import {deleteFromCart,updateCart} from '../../actions/cartActions';
    }
 
 onIncrement(_id){
-  this.props.updateCart(_id,1)
+  this.props.updateCart(_id,1,this.props.cart)
 }
 
 onDecrement(_id,qty){
   if(qty >1){
-  this.props.updateCart(_id,-1)
+  this.props.updateCart(_id,-1,this.props.cart)
 }
 }
 
@@ -48,7 +51,10 @@ onDecrement(_id,qty){
      return (
        <Panel key={item._id}>
          <Row>
-          <Col xs={12} md={4} >
+           <Col xs={12} md={2}>
+             <Image src={item.images} />
+           </Col>
+          <Col xs={12} md={3} >
           <h6>{item.title} </h6>
           </Col>
           <Col xs={12}  md={2}>
@@ -57,7 +63,7 @@ onDecrement(_id,qty){
           <Col xs={12}  md={2}>
           <h6>qty <Label bsStyle='success'>{item.qty}</Label></h6>
           </Col>
-          <Col xs={12}  md={4}>
+          <Col xs={12}  md={3}>
           <ButtonGroup style={{minWidth:'300px'}}>
           <Button onClick={this.onIncrement.bind(this,item._id)} bsStyle='default' bsSize='small'> + </Button>
           <Button onClick={this.onDecrement.bind(this,item._id,item.qty)} bsStyle='default' bsSize='small'> - </Button>
@@ -120,7 +126,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
     deleteFromCart : deleteFromCart,
-    updateCart : updateCart
+    updateCart : updateCart,
+    getCart :  getCart
   },dispatch)
 
 }

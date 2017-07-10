@@ -1,7 +1,6 @@
 import React from 'react'
 import {Nav , NavItem , Navbar ,Badge } from 'react-bootstrap';
-
-export class Menu extends React.Component{
+class Menu extends React.Component{
   render(){
     return (
       <Navbar  inverse collapseOnSelect fixedTop>
@@ -19,10 +18,15 @@ export class Menu extends React.Component{
             <Nav pullRight>
               <NavItem eventKey={1} href="/admin">Admin</NavItem>
               <NavItem eventKey={2} href="/cart">Your Cart
-              <Badge className="badge">1</Badge></NavItem>
+                {
+                  (this.props.currentItemQty > 0) ? (<Badge className="badge">{this.props.currentItemQty}</Badge>) : ('')
+                }
+            </NavItem>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
     );
   }
 }
+
+export default Menu;

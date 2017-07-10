@@ -1,6 +1,13 @@
 "use strict"
 export function cartReducers (state={cart:[]},action){
   switch(action.type){
+    case "GET_CART" :
+    return {...state,cart : action.payload,
+      totalAmount : totals(action.payload).amount,
+      totalQty : totals(action.payload).qty  
+    }
+
+    break;
     case "ADD_TO_CART" :
   return {cart:[...state,...action.payload],
           totalAmount : totals(action.payload).amount,
@@ -16,15 +23,10 @@ export function cartReducers (state={cart:[]},action){
 break;
 
   case "UPDATE_CART" :
-  const currentCartToUpdate = [...state.cart];
-  const indexToUpdate = currentCartToUpdate.findIndex((cartItem)=>{
-    return cartItem._id === action._id;
-  })
-  const  newCartToUpdate = {...currentCartToUpdate[indexToUpdate],qty :currentCartToUpdate[indexToUpdate].qty +action.unit};
-   let cartUpdate =  [...currentCartToUpdate.slice(0,indexToUpdate),newCartToUpdate,...currentCartToUpdate.slice(indexToUpdate+1)];
-   return {...state,cart:cartUpdate,
-     totalAmount : totals(cartUpdate).amount,
-     totalQty : totals(cartUpdate).qty
+
+   return {...state,cart:action.payload,
+     totalAmount : totals(action.payload).amount,
+     totalQty : totals(action.payload).qty
    }
   break;
   }
