@@ -2,7 +2,9 @@ body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-
+.navbar-inverse {
+  background-color: #0a2c52 !important;
+}
 @media (min-width: 768px){
   .navbar-nav {
 
@@ -11,7 +13,13 @@ body {
 
 }
 
-
+.progress {
+  height : 15px !important;
+}
+  .progress .progress-bar {
+    font-size: 12px !important;
+    line-height: 15px !important;
+  }
 a {
   color: #00B7FF;
 }
@@ -29,11 +37,33 @@ a {
   margin : 0;
   outline-offset: 0;
 }
+
 .heading {
   text-align: center;
   margin-bottom: 50px;
+  font-size:20px;
+  color : black;
 }
+
+@media (min-width: 768px){
+.website_name {
+  font-size : 20px;
+  text-align: center;
+  color : white;
+}
+}
+
+@media (max-width: 767px){
+
 .website_name {
   text-align: center;
-  margin-bottom: 20px;
+  font-size : 15px;
+  color : white;
+}
+}
+
+.glyphicon {
+    min-height:  20px !important;
+    line-height: 20px !important;
+    margin : 0 auto !important;
 }

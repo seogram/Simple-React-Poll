@@ -6,7 +6,7 @@ class Menu extends React.Component{
       <Navbar  inverse collapseOnSelect fixedTop>
           <Navbar.Header>
             <Navbar.Brand>
-              <a href="/">Book Store</a>
+              <a href="/"><img src='images/logo.png' width='150'/></a>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>

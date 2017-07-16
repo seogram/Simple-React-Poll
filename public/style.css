@@ -24,3 +24,14 @@ body {
 .show {
   display : block;
 }
+.padding-0{
+    padding-right:0 !important;
+    padding-left:0 !important;
+}
+.form-control-feedback  {
+    right: 5 !important;
+    display : none;
+  }
+.glyphicon {
+  display : none !important;
+}

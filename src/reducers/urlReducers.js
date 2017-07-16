@@ -1,15 +1,50 @@
 "use strict"
 
 export function urlReducers(state = {
-test : {results :{
-  pagespeed_score : "",
-  yslow_score : "",
-  page_load_time : "",
-  page_elements : "",
-  page_bytes : "",
-  fully_loaded_time : ""
+test : {desktop :{
+  title: '',
+  targeturl : '',
+  score : '' ,
+  htmlResponseBytes : '' ,
+  cssResponseBytes : '',
+  imageResponseBytes : '',
+  javascriptResponseBytes : '',
+  LandingPageRedirectsName :'',
+  LandingPageRedirectsImpact : '',
+  LandingPageRedirectsSummary :'',
+  EnableGzipCompressionName : '',
+  EnableGzipCompressionImpact : '',
+  EnableGzipCompressionSummary : '',
+  LeverageBrowserCachingName : '',
+  LeverageBrowserCachingImpact : '',
+  LeverageBrowserCachingSummary :'',
+  ServerResponseTimeName : '',
+  ServerResponseTimeImpact : '',
+  ServerResponseTimeSummary : '',
+  MinifyCssName : '',
+  MinifyCssImpact : '',
+  MinifyCssSummary : '',
+  MinifyHTMLName : '',
+  MinifyHTMLImpact : '',
+  MinifyHTMLSummary : '',
+  MinifyJavaScriptName : '',
+  MinifyJavaScriptImpact : '',
+  MinifyJavaScriptSummary : '',
+  MinimizeRenderBlockingName : '',
+  MinimizeRenderBlockingImpact : '',
+  MinimizeRenderBlockingSummary : '',
+  OptimizeImagesName : '',
+  OptimizeImagesImpact : '',
+  OptimizeImagesSummary : '',
+  PrioritizeVisibleContentName : '',
+  PrioritizeVisibleContentImpact : '',
+  PrioritizeVisibleContentSummary : '',
+  //screenshotData : '',
+  screenshotPath : '',
+  screenshotwidth : '',
+  screenshotHeight : ''
 },
-resources : {screenshot :""}}}
+mobile : {screenshot :""}}}
 ,action){
    switch(action.type){
     case "GET_TEST" :

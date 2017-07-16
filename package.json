@@ -1,11 +1,15 @@
 {
   "name": "redux-app",
   "version": "0.0.0",
+  "engines": {
+    "node": "8.1.4"
+  },
   "private": true,
   "scripts": {
-    "start": "node ./bin/www & node apiServer.js"
+    "start": "node ./bin/www | node apiServer.js"
   },
   "dependencies": {
+    "awis": "^1.0.8",
     "axios": "^0.16.2",
     "babel-core": "^6.21.0",
     "babel-loader": "^6.4.1",

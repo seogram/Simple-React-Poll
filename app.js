@@ -10,6 +10,9 @@ app.use(logger('dev'));
 const apiProxy =httpProxy.createProxyServer({
  target:"http://localhost:3001"
 });
+apiProxy.on("error", function(err, req, res){
+  console.log(err);
+});
 app.use('/api', function(req, res){
  apiProxy.web(req, res, {
     changeOrigin: true
