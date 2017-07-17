@@ -67,3 +67,8 @@ a {
     line-height: 20px !important;
     margin : 0 auto !important;
 }
+
+.loader {
+  text-align: center;
+  margin : 0 auto;
+}

@@ -52,7 +52,7 @@ mobile : {screenshot :""}}}
      break;
 
  case "GET_TEST_REJECTED":
- return {...state}
+ return {...state,isLoading : false}
 break;
 
  }

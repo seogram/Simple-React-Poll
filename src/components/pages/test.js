@@ -1,6 +1,6 @@
 "use strict"
   import React from 'react';
-  import {MenuItem, InputGroup, DropdownButton,Image,Thumbnail, Col, Row, Well, Panel,ProgressBar, Form ,FormControl,FormGroup, ControlLabel, Button,Label,Table,Glyphicon} from 'react-bootstrap';
+  import {MenuItem, InputGroup, DropdownButton,Image,Thumbnail, Col, Row, Well, Panel,ProgressBar, Form ,FormControl,FormGroup, ControlLabel, Button,Label,Table,Glyphicon,Modal} from 'react-bootstrap';
   import {connect} from 'react-redux';
   import {bindActionCreators} from 'redux';
   import {findDOMNode} from 'react-dom';
@@ -9,8 +9,14 @@
   import {getAllTests} from '../../actions/allTests';
   import axios from 'axios';
   import {FormErrors} from '../formErrors';
+  import Loading from '../loading';
+  import LoadingModal from '../loadingModal';
+
+  //import ReactLoading from 'react-loading';
+
 
 class Test extends React.Component{
+
 
   constructor(props) {
           super(props);
@@ -23,20 +29,26 @@ class Test extends React.Component{
               checkboxValid : false,
               formValid : false,
               submitBTN : false,
-              isLoading : false
+              isLoading : false,
+              loadingModal : false
           }
       }
       componentDidMount(){
-        this.props.getAllTests();
+        setTimeout(this.props.getAllTests()
+          , 1000)
       }
+
+//       componentDidUpdate(prevProps, prevState) {
+//   if (this.state.loadingModal > prevState.loadingModal) {
+//     this.setState({loadingModal : false})
+//   }
+// }
 
 
   handleSubmit(){
-    // var requestedUrl=findDOMNode(this.refs.url).value;
 
+  //  alert('loading');
     var strategy = this.state.strategy;
-    //console.log('strategy',strategy);
-    //
     var requestedUrl = this.state.url;
     // console.log('url',requestedUrl);
 
@@ -45,11 +57,10 @@ class Test extends React.Component{
   //    this.setState({submitBTN : false , urlValid:false});
   //  }else {
 
+  this.setState({url : requestedUrl,isLoading : true,loadingModal : true});
+
   this.props.testUrl(requestedUrl,strategy);
-  this.setState({
-   url : requestedUrl,
-   isLoading : true
- });
+
 
 
   //  }
@@ -102,8 +113,8 @@ class Test extends React.Component{
       }
 
     handleChange(e) {
-       this.setState({ url: e.target.value });
-       this.handleSubmitBTN();
+    this.setState({ url: e.target.value });
+    this.handleSubmitBTN();
      }
 
     handleSubmitBTN() {
@@ -138,13 +149,14 @@ render(){
         <p>IMAGE RESPONSE BYTES :{testItems.desktop.imageResponseBytes}</p>
         <p>JS RESPONSE BYTES :{testItems.desktop.javascriptResponseBytes}</p>
         <p>JS RESPONSE BYTES :{testItems.desktop.javascriptResponseBytes}</p>
+
         </Thumbnail>
         </Col>
 
       );
   });
 
-  //var y = Number(this.props.test.desktop.score);
+
   var  imgPath = 'images/'+this.props.test.desktop.screenshotPath;
   var s = Number(this.props.test.desktop.score);
   let isLoading = this.state.isLoading;
@@ -164,7 +176,6 @@ return(
                 <FormGroup controlId="url"   validationState={(this.props.loading==false)?(null):this.getValidationState('url')} >
                   <Col xs={12} sm={8} >
                 <FormControl type="text" placeholder="Enter URL" ref="url" name="url"
-                  value={(this.props.loading==false)?(''):(this.state.url)}
                   onChange={this.handleChange.bind(this)} />
                   <FormControl.Feedback />
                   </Col>
@@ -201,6 +212,7 @@ return(
               <p>CSS RESPONSE BYTES : <Label>{this.props.test.desktop.cssResponseBytes}</Label> </p>
               <p>IMAGE RESPONSE BYTES : <Label>{this.props.test.desktop.imageResponseBytes}</Label> </p>
               <p>JS RESPONSE BYTES : <Label>{this.props.test.desktop.javascriptResponseBytes}</Label> </p>
+
             </Col>
             <Col xs={6}>
               <div className='screenshot-macbook'>
@@ -305,9 +317,12 @@ return(
    <Col xs={12}>
 
      <h2 className='heading'>Lates Results</h2>
-     { allTestsList }
+     {(this.props.allTestIsFetching==false)?(allTestsList):( <Loading/>)}
+     {/* allTestsList  */}
    </Col>
 </Row>
+<LoadingModal show={(this.props.loading == false)?(!this.state.loadingModal):(this.state.loadingModal)} />
+
 </Well>
 )
 }
@@ -316,12 +331,13 @@ return(
 function mapStateToProps(state){
 return {
 books: state.books.books,
-msg : state.books.msg,
-style: state.books.style,
-validation : state.books.validation,
-delMsg : state.books.delMsg,
-delValidation : state.books.delValidation,
+// msg : state.books.msg,
+// style: state.books.style,
+// validation : state.books.validation,
+// delMsg : state.books.delMsg,
+// delValidation : state.books.delValidation,
 loading : state.test.isLoading,
+allTestIsFetching : state.allTests.allTestIsFetching,
 test : state.test.test,
 allTests : state.allTests.allTests
 }
