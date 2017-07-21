@@ -62,10 +62,12 @@ a {
 }
 }
 
-.glyphicon {
-    min-height:  20px !important;
+.form-control-feedback {
+  top : 3% !important;
+  right : 3% !important;
+    /*min-height:  20px !important;
     line-height: 20px !important;
-    margin : 0 auto !important;
+    margin : 0 auto !important;*/
 }
 
 .loader {

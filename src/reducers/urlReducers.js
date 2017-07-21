@@ -48,7 +48,7 @@ mobile : {screenshot :""}}}
 ,action){
    switch(action.type){
     case "GET_TEST" :
-     return {...state,test:{...action.payload},isLoading : false}
+     return {...state,test:{...action.payload},isLoading : true}
      break;
 
  case "GET_TEST_REJECTED":

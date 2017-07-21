@@ -14,7 +14,7 @@ import {getCart} from '../src/actions/cartActions';
  return(
 
 <div>
-<Menu currentItemQty = {this.props.qty}/>
+<Menu />
     {this.props.children}
 <Footer />
 </div>

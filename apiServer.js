@@ -15,16 +15,15 @@ app.use(cookieParser());
 const EMAIL = 'pamo@wmail.club';
 const APIKEY = '052e3a2e9e948d997e774bd8b34849d3';
 const BROWSER = 3;
-
-
 const fs = require('fs');
 
 // APIs
-//mongoose.connect('mongodb://localhost:27017/bookshop');
-mongoose.connect('mongodb://test:12345@ds151452.mlab.com:51452/bookshop');
+mongoose.connect('mongodb://localhost:27017/bookshop');
+//mongoose.connect('mongodb://test:12345@ds151452.mlab.com:51452/bookshop');
 
 var db = mongoose.connection;
 db.on('error',console.error.bind(console,'#Monodd-Connection error'));
+
 // ----> Setup session ---- //
 app.use(session({
     secret: 'mySecrett',
@@ -38,96 +37,109 @@ app.use(session({
 }));
 // SAVE SESSION CART API
 app.post('/cart', function(req, res){
-var cart = req.body;
-req.session.cart = cart;
-req.session.save(function(err){
-if(err){
-  console.log('saving to cart error');
-}
-res.json(req.session.cart);
-})
+    var cart = req.body;
+    req.session.cart = cart;
+    req.session.save(function(err){
+    if(err){
+    console.log('saving to cart error');
+    }
+    res.json(req.session.cart);
+    })
 });
+
 // GET SESSION CART API
 app.get('/cart', function(req, res){
-if(typeof req.session.cart !=='undefined'){
-res.json(req.session.cart);
-}
+    if(typeof req.session.cart !=='undefined'){
+    res.json(req.session.cart);
+    }
 });
+
 //---- End session -------- //
+
 var Books = require('./models/books.js');
+
 //---->>> POST BOOKS <<<-----
+
 app.post('/books', function(req, res){
- var book = req.body;
- Books.create(book, function(err, books){
- if(err){
-   console.log('saving book error');
- }
- res.json(books);
- })
+     var book = req.body;
+     Books.create(book, function(err, books){
+       if(err){
+         console.log('saving book error');
+     }
+     res.json(books);
+     })
 });
+
 //----->>>> GET BOOKS <<<---------
+
 app.get('/books', function(req, res){
-Books.find(function(err, books){
-if(err){
-  console.log('getting book list error');
-}
-res.json(books)
-})
+    Books.find(function(err, books){
+      if(err){
+        console.log('getting book list error');
+      }
+    res.json(books)
+    })
 });
+
 //---->>> DELETE BOOKS <<<------
+
 app.delete('/books/:_id', function(req, res){
-var query = {_id: req.params._id};
-Books.remove(query, function(err, books){
-if(err){
-  console.log('remove book error');
-}
-res.json(books);
-})
+  var query = {_id: req.params._id};
+  Books.remove(query, function(err, books){
+      if(err){
+        console.log('remove book error');
+      }
+      res.json(books);
+    })
 });
 //---->>> UPDATE BOOKS <<<------
-app.put('/books/:_id', function(req, res){
-var book = req.body;
-var query = req.params._id;
 
-var update = {'$set':{
- title:book.title,
- description:book.description,
- image:book.image,
- price:book.price
- }
- };
- // When true returns the updated document
- var options = {new: true};
- Books.findOneAndUpdate(query, update,
-options, function(err, books){
- if(err){
-   console.log('update book error');
- }
- res.json(books);
- })
+app.put('/books/:_id', function(req, res){
+    var book = req.body;
+    var query = req.params._id;
+
+    var update = {'$set':{
+
+         title:book.title,
+         description:book.description,
+         image:book.image,
+         price:book.price
+     }
+     };
+     // When true returns the updated document
+     var options = {new: true};
+     Books.findOneAndUpdate(query, update,
+    options, function(err, books){
+     if(err){
+       console.log('update book error');
+     }
+     res.json(books);
+     })
 })
 // END APIs
 
 //Get books images API
 app.get('/images',function(req,res){
-  const imgFolder = __dirname + '/public/images';
-  //require file system
-  //read all files in the directory
-  fs.readdir(imgFolder,function(err,files){
-    if(err){
-    return  console.error(err);
-    }
-    //return an empty array
-    const fileArr = [];
-    files.forEach(function(file){
-      fileArr.push({name : file})
-    })
-    res.json(fileArr);
-  });
+    const imgFolder = __dirname + '/public/images';
+    //require file system
+    //read all files in the directory
+    fs.readdir(imgFolder,function(err,files){
+      if(err){
+      return  console.error(err);
+      }
+      //return an empty array
+      const fileArr = [];
+      files.forEach(function(file){
+        fileArr.push({name : file})
+      })
+      res.json(fileArr);
+    });
 });
 
 // url test api
+
 var Tests = require('./models/tests.js');
+
 //app.get('/testUrl/:url', function(req, res){
 //  var targeturl = req.param.url;
 
@@ -147,10 +159,10 @@ var https = require('https'),
     strategy = MyStrategy;
 
     https.get({
-host: 'www.googleapis.com',
-path: '/pagespeedonline/v1/runPagespeed?url=' + encodeURIComponent(url) +
-'&key='+key+'&strategy='+strategy+'&screenshot='+screenshot
-}, function(resPageSpeed) {
+    host: 'www.googleapis.com',
+    path: '/pagespeedonline/v1/runPagespeed?url=' + encodeURIComponent(url) +
+    '&key='+key+'&strategy='+strategy+'&screenshot='+screenshot
+    }, function(resPageSpeed) {
     var json = "";
     resPageSpeed.on('data', function(d) {
     json += d;
@@ -161,12 +173,13 @@ path: '/pagespeedonline/v1/runPagespeed?url=' + encodeURIComponent(url) +
   //Converting screenshot to 64bit image
         var id = Math.floor(Math.random() * 200000000);
         const imgPath = __dirname + '/public/images/'+'screenshot'+id+'.jpeg';
+
         var newScreenshot = json.screenshot.data.replace(/_/g,'/').replace(/-/g,'+');
-      // require("fs").writeFile("out.jpeg", base64Data, 'base64', function(err) {
-        fs.writeFile (imgPath, newScreenshot,'base64', function(err){
-          console.log(err);
-        });
-         var imgSrc = 'screenshot'+id+'.jpeg' ;
+
+       fs.writeFile (imgPath, newScreenshot,'base64', function(err){
+         console.log(err);
+       });
+        var imgSrc = 'screenshot'+id+'.jpeg' ;
 
       var pageSpeedData = {
                desktop :{
@@ -200,14 +213,14 @@ path: '/pagespeedonline/v1/runPagespeed?url=' + encodeURIComponent(url) +
                  MinifyJavaScriptSummary : json.formattedResults.ruleResults.MinifyJavaScript.urlBlocks[0].header.format,
                  MinimizeRenderBlockingName : json.formattedResults.ruleResults.MinimizeRenderBlockingResources.localizedRuleName,
                  MinimizeRenderBlockingImpact : json.formattedResults.ruleResults.MinimizeRenderBlockingResources.ruleImpact.toFixed(2),
-                 MinimizeRenderBlockingSummary : json.formattedResults.ruleResults.MinimizeRenderBlockingResources.urlBlocks[1].header.format,
+                 MinimizeRenderBlockingSummary : json.formattedResults.ruleResults.MinimizeRenderBlockingResources.urlBlocks[0].header.format,
                  OptimizeImagesName : json.formattedResults.ruleResults.OptimizeImages.localizedRuleName,
                  OptimizeImagesImpact : json.formattedResults.ruleResults.OptimizeImages.ruleImpact.toFixed(2),
                  OptimizeImagesSummary : json.formattedResults.ruleResults.OptimizeImages.urlBlocks[0].header.format,
                  PrioritizeVisibleContentName : json.formattedResults.ruleResults.PrioritizeVisibleContent.localizedRuleName,
                  PrioritizeVisibleContentImpact : json.formattedResults.ruleResults.PrioritizeVisibleContent.ruleImpact.toFixed(2),
                  PrioritizeVisibleContentSummary : json.formattedResults.ruleResults.PrioritizeVisibleContent.urlBlocks[0].header.format,
-                 //screenshotData : newScreenshot,
+                 screenshotData : newScreenshot,
                  screenshotPath : imgSrc,
                  screenshotType : 'image/png',
                  screenshotwidth : json.screenshot.width,
@@ -227,20 +240,59 @@ path: '/pagespeedonline/v1/runPagespeed?url=' + encodeURIComponent(url) +
 
 }).on('error', function(e) {
 console.error(e);
+res.send(e);
 });
 
 
 //Get Previous test results when the main test page is loaded
 });
 
-app.get('/test',function(req,res){
-  Tests.find(function(err, tests){
-  if(err){
-    console.log('getting previous results failed')
-  }
-  res.json(tests)
+// Requesting All tests
+app.get('/allTest/:skip',function(req,res){
+  var skips = Number(req.params.skip);
+
+console.log(skips);
+Tests.find().skip(skips).limit(4).exec(function (err, tests) {
+    if(err){
+      console.log('getting previous results failed')
+    }
+    res.json(tests)
+  });
 });
+
+//Request More test results by clicking on more btn
+// app.get('/test',function(req,res){
+//   var skip = req.params.skip;
+//   console.log(skip);
+
+
+// Tests.find().limit(4).skip(4).exec(function (err, tests) {
+//     if(err){
+//       console.log('getting previous results failed')
+//     }
+//     res.json(tests)
+//   });
+// });
+
+
+
+
+//Test Detail Request
+
+app.get('/resultDetailsPage/:_id',function(req,res){
+
+    var id = req.params._id;
+    console.log('test detail id',id);
+    Tests.findById(id,function(err, testDetails){
+    if(err){
+      console.log('getting test details failed')
+    }
+    console.log('test detail result',testDetails);
+    res.json(testDetails);
+  });
 });
+
+
 
 app.listen(3001, function(err){
  if(err){

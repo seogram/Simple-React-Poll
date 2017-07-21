@@ -1,27 +1,31 @@
 import React from 'react'
-import {Nav , NavItem , Navbar ,Badge } from 'react-bootstrap';
+import {Nav , NavItem , Navbar ,Badge,MenuItem ,Image} from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap'
+import {Link} from 'react-router';
+import ReactDOM from 'react-dom';
+
 class Menu extends React.Component{
+
   render(){
     return (
       <Navbar  inverse collapseOnSelect fixedTop>
           <Navbar.Header>
             <Navbar.Brand>
-              <a href="/"><img src='images/logo.png' width='150'/></a>
+              <Link to ="/"><Image src='images/logo.png' width='150'/></Link>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav>
-              <NavItem eventKey={1} href="/about">About us</NavItem>
-              <NavItem eventKey={2} href="/contact">Contact</NavItem>
+              <LinkContainer to={{ pathname: '/about' }}>
+              <NavItem eventKey={1}>About us</NavItem>
+              </LinkContainer>
             </Nav>
             <Nav pullRight>
-              <NavItem eventKey={1} href="/admin">Admin</NavItem>
-              <NavItem eventKey={2} href="/cart">Your Cart
-                {
-                  (this.props.currentItemQty > 0) ? (<Badge className="badge">{this.props.currentItemQty}</Badge>) : ('')
-                }
-            </NavItem>
+              <LinkContainer to={{ pathname: '/admin' }}>
+              <NavItem eventKey={1} >Admin</NavItem>
+              </LinkContainer>
+
             </Nav>
           </Navbar.Collapse>
         </Navbar>
