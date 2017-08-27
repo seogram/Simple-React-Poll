@@ -1,310 +1,897 @@
 "use strict"
-  import React from 'react';
-  import {MenuItem, InputGroup, DropdownButton,Image,Thumbnail, Col, Row, Well, Panel,ProgressBar, Form ,FormControl,FormGroup, ControlLabel, Button,Label,Table,Glyphicon,Modal} from 'react-bootstrap';
-  import {connect} from 'react-redux';
-  import {bindActionCreators} from 'redux';
-  import {findDOMNode} from 'react-dom';
-  //import {postBook, deleteBook, getBooks,resetForm,resetDelForm} from '../../actions/booksActions';
-  import {testUrl} from '../../actions/testUrl';
-  import {getAllTests} from '../../actions/allTests';
-  import axios from 'axios';
-  import {FormErrors} from '../formErrors';
-  import Loading from '../loading';
-  import LoadingModal from '../loadingModal';
+import React from 'react';
+import {
+  MenuItem,
+  InputGroup,
+  DropdownButton,
+  Image,
+  Thumbnail,
+  Col,
+  Row,
+  Well,
+  Panel,
+  ProgressBar,
+  Form,
+  FormControl,
+  FormGroup,
+  ControlLabel,
+  Button,
+  Label,
+  Table,
+  Glyphicon,
+  Modal,
+  Tabs,
+  Tab,
+  Link,
+  Accordion,
+  Badge
+} from 'react-bootstrap';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {findDOMNode} from 'react-dom';
+import {testUrl} from '../../actions/report';
 
-class currentResultDetail extends React.Component{
+import LoadingModal from '../loadingModal';
+import Issue_generator from '../issue_list_generator';
+var isUrl = require('is-url-superb');
 
+class currentResultDetail extends React.Component {
 
   constructor(props) {
-          super(props);
-          this.state = {
-              url: '',
-              strategy : 'desktop',
-              validationState : 'null',
-              formErrors : {url : ''},
-              urlValid : false,
-              checkboxValid : false,
-              formValid : false,
-              submitBTN : false,
-              isLoading : false,
-              loadingModal : false
-          }
-      }
-       componentDidMount(){
-       var requestedUrl = this.props.location.query.url;
-       var strategy = this.props.location.query.strategy;
-       //console.log(requestedUrl,strategy);
-       this.setState({url: '',isLoading : true,loadingModal : true,submitBTN : false});
-       this.props.testUrl(requestedUrl,strategy);
-      }
-
-      componentWillReceiveProps(newProps){
-        if(newProps.test && this.state.isLoading){
-          this.setState({
-            isLoading: false
-          })
-        }
-      }
-
-
-
-  handleSubmit(){
-
-      var strategy = this.state.strategy;
-      var requestedUrl = this.state.url;
-      this.setState({url: '',isLoading : true,loadingModal : true,submitBTN : false});
-      findDOMNode(this.refs.url).value='';
-      this.props.testUrl(requestedUrl,strategy);
-
-  //  }
+    super(props);
+    this.state = {
+      url: '',
+      strategy: 'desktop',
+      validationState: 'null',
+      urlValid: false,
+      checkboxValid: false,
+      formValid: false,
+      submitBTN: false,
+      isLoading: false,
+      loadingModal: false,
+      filmstripModal : false,
+      filmStripImg : '',
+      testItems: [],
+      defaultkey : '1'
     }
-  //  var urlNoProtocol = requestedUrl.replace(/^https?\:\/\//i, "");
+  }
+  componentDidMount() {
+      var requestedUrl = this.props.location.query.url;
+      var strategy = this.props.location.query.strategy;
+      this.setState({url: '',isLoading : true,loadingModal : true,submitBTN : false});
+      this.props.testUrl(requestedUrl);
+  }
 
-  //  var location = Number(this.state.location);
-//    var prefix = 'www.';
-  //  if (urlNoProtocol.substr(0, prefix.length) !== prefix){
-  //    var trimmedUrl = prefix + urlNoProtocol;
-      //  this.props.testUrl(trimmedUrl,location);
-      //  this.setState({
-      //   url : trimmedUrl,
-      //   isLoading : true
-      // });
-  //  }
-    // else {
-    //   this.props.testUrl(urlNoProtocol,location);
-    //   this.setState({
-    //    url : urlNoProtocol,
-    //    isLoading : true
-    //  });
-    // }
-  //  }
+  componentWillReceiveProps(newProps) {
+    if (newProps.test && this.state.isLoading) {
+      this.setState({isLoading: false})
+    }
+  }
 
-    getValidationState(urlField) {
-      switch(urlField){
-      case 'url' :
+  handleSubmit(e){
+   if (e.key === 13 || url ==null/* Enter */) {
+  event.preventDefault();
+}
+      let requestedUrl = this.state.url;
+      let urlNoProtocol = requestedUrl.replace(/^https?\:\/\//i, "");
+      let prefix = 'http://';
+      let newUrl = prefix + urlNoProtocol;
+      findDOMNode(this.refs.url).value='';
+      this.setState({url: '',isLoading : true,loadingModal : true,submitBTN : false});
+      console.log(newUrl);
+      this.props.testUrl(newUrl);
+  }
+
+
+  getValidationState(urlField) {
+    switch (urlField) {
+      case 'url':
         var url = this.state.url;
-        if (url == ''){
+        if (url == '') {
           return null
-        }
-        else if (!this.state.urlValid && url.length > 0) {
-        return 'warning';
-      }else  {
+        } else if (!this.state.urlValid && url.length > 0) {
+          return 'warning';
+        } else {
           return 'success';
         }
         break;
-        case 'strategy' :
-        var strategy = this.state.strategy;
-        if(strategy == ''){
-          return 'warning';
-        }
-        else if (strategy.length >0){
-          return 'success'
-        }
-         default :
-        break;
-      }
-      }
 
-    handleChange(e) {
-      this.setState({ url: e.target.value },function(){
-        this.handleSubmitBTN();
-      });
+      default:
+        break;
+    }
+  }
+
+  handleChange(e) {
+    this.setState({
+      url: e.target.value
+    }, function() {
+      this.handleSubmitBTN();
+    });
+  }
+
+  handleSubmitBTN() {
+    var value = this.state.url;
+    var urlCheck = isUrl(value);
+
+      if (urlCheck){
+        this.setState({submitBTN: true, urlValid: true});
+         } else {
+           this.setState({submitBTN: false, urlValid: false});
+         }
      }
 
-    handleSubmitBTN() {
-      var value = this.state.url;
-      var strategy = this.state.strategy;
-      var urlCheck = value.match(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm);
-      if (urlCheck == '' ){
-        this.setState({submitBTN : false , urlValid:false});
-    //    console.log('urlCheck == nothing rule',value);
-      }
-      else if (urlCheck == null &&  value.length > 0) {
-      this.setState({submitBTN : false});
-    //  console.log('urlCheck == nothing but has value',value);
+  strategyHandle(e) {
+    this.setState({strategy: e.target.value});
+  }
 
-      }else {
-          this.setState({submitBTN : true, urlValid : true});
-        //  console.log('urlCheck passed',value);
+  modalClose() {
+    this.setState({ filmstripModal: false });
+  }
 
+  handleTab(id) {
+    this.setState({defaultkey : id});
+
+  }
+  handleTabSelect(defaultkey){
+
+    this.setState({defaultkey});
+  }
+  render() {
+
+    let isLoading = this.state.isLoading,
+        Report_url = this.props.test.url,
+        page_Score = this.props.test.page_Score,
+        test_Number = this.props.test.test_Number,
+        page_Size = this.props.test.page_Size,
+        page_Speed = this.props.test.page_Speed,
+        city = this.props.test.city,
+        server_IP = this.props.test.server_IP,
+        total_Issues = this.props.test.total_Issues,
+        report_Date = this.props.test.report_Date,
+        critical_Number = this.props.test.critical_Number,
+        error_Number = this.props.test.error_Number,
+        notice_Number = this.props.test.notice_Number,
+        warning_Number = this.props.test.warnings_Number,
+        mobile_screenShot = this.props.test.mobile_screenShot,
+        desktop_screenShot = this.props.test.desktop_screenShot,
+        requests_Number = this.props.test.requests_Number,
+        issues = this.props.test.issues,
+        issue_Content = this.props.test.issues.content,
+        issue_Security = this.props.test.issues.security,
+        issue_Performance = this.props.test.issues.performance,
+        issue_Compatibility = this.props.test.issues.compatibility,
+        stats_By_Category = this.props.test.stats_By_Category;
+
+    let contentIssuesByType = {};
+    let contentIssuesByTest = {};
+    let content_issue_list = [];
+    let content_issues_warning_count = 0;
+    let content_issues_notice_count = 0;
+    let content_issues_error_count = 0;
+    let content_issues_critical_count = 0;
+    let content_Score = 0;
+
+    let securityIssuesByType = {};
+    let securityIssuesByTest = {};
+    let security_issue_list = [];
+    let security_issues_warning_count = 0;
+    let security_issues_notice_count = 0;
+    let security_issues_error_count = 0;
+    let security_issues_critical_count = 0;
+    let security_Score = 0;
+
+    let compatibilityIssuesByType = {};
+    let compatibilityIssuesByTest = {};
+    var compatibility_issue_list = [];
+    let compatibility_issues_warning_count = 0;
+    let compatibility_issues_notice_count = 0;
+    let compatibility_issues_error_count = 0;
+    let compatibility_issues_critical_count = 0;
+    let compatibility_Score = 0;
+
+
+
+    let performanceIssuesByType = {};
+    let performanceIssuesByTest ={};
+    let performance_issue_list = [];
+    let performance_issues_warning_count = 0;
+    let performance_issues_notice_count = 0;
+    let performance_issues_error_count = 0;
+    let performance_issues_critical_count = 0;
+    let performance_Score = 0;
+    let lastRender = 0;
+    let firstRender = 0;
+    var partialHtml = [];
+
+
+
+
+    const filmstrips = this.props.test.filmstrip.map((filmItem, i) => {
+      let imgSrc = filmItem.url;
+      if(filmItem.order == '2'){
+        firstRender = (filmItem.delay/1000).toFixed(2);
       }
+
+      return (
+        <div className="col-xs-2" key={i}><img src={imgSrc} className="filmstrips"  onClick={()=>{
+            this.setState({ filmstripModal: true,filmStripImg : imgSrc });
+
+          }} /></div>
+      );
+    });
+
+    if (issue_Content != null) {
+
+        issue_Content.forEach((error) => {
+        contentIssuesByType[error.type] = contentIssuesByType[error.type] || [];
+        contentIssuesByTest[error.test] = contentIssuesByTest[error.test] || [];
+        contentIssuesByType[error.type].push(error);
+        contentIssuesByTest[error.test].push(error);
+      });
+        //Caculating error/warning / notice / critical count
+        if(contentIssuesByType.warning){
+           contentIssuesByType.warning.map((item1)=>{ content_issues_warning_count +=item1.count});
+          }
+          if(contentIssuesByType.error){
+          contentIssuesByType.error.map((item2)=>{ content_issues_error_count +=item2.count});
+        }
+          if(contentIssuesByType.critical){
+          contentIssuesByType.critical.map((item3)=>{ content_issues_critical_count +=item3.count});
+          }
+          if (contentIssuesByType.notice) {
+            contentIssuesByType.notice.map((item4)=>{content_issues_notice_count +=item4.count});
+       }
     }
 
-    strategyHandle(e){
-      this.setState({strategy : e.target.value});
+    if (issue_Security != null) {
+      issue_Security.forEach((error) => {
+        securityIssuesByType[error.type] = securityIssuesByType[error.type] || [];
+        securityIssuesByTest[error.test] = securityIssuesByTest[error.test] || [];
+        securityIssuesByType[error.type].push(error);
+        securityIssuesByTest[error.test].push(error);
+      });
+        //Caculating error/warning / notice / critical count
+        if(securityIssuesByType.warning){
+           securityIssuesByType.warning.map((item)=>{ security_issues_warning_count +=item.count});
+          }
+        if(securityIssuesByType.error){
+          securityIssuesByType.error.map((item)=>{ security_issues_error_count +=item.count});
+          }
+        if(securityIssuesByType.critical){
+          securityIssuesByType.critical.map((item)=>{ security_issues_critical_count +=item.count});
+          }
+        if (securityIssuesByType.notice) {
+            securityIssuesByType.notice.map((item)=>{security_issues_notice_count +=item.count});
+       }
+    }
+
+    if (issue_Performance != null) {
+
+      issue_Performance.forEach((error) => {
+        performanceIssuesByType[error.type] = performanceIssuesByType[error.type] || [];
+        performanceIssuesByTest[error.test] = performanceIssuesByTest[error.test] || [];
+        performanceIssuesByType[error.type].push(error);
+        performanceIssuesByTest[error.test].push(error);
+      });
+        //Caculating error/warning / notice / critical count
+        if(performanceIssuesByType.warning){
+           performanceIssuesByType.warning.map((item1)=>{ performance_issues_warning_count +=item1.count});
+          }
+          if(performanceIssuesByType.error){
+          performanceIssuesByType.error.map((item2)=>{ performance_issues_error_count +=item2.count});
+          }
+          if(performanceIssuesByType.critical){
+          performanceIssuesByType.critical.map((item3)=>{ performance_issues_critical_count +=item3.count});
+          }
+          if (performanceIssuesByType.notice) {
+            performanceIssuesByType.notice.map((item4)=>{performance_issues_notice_count +=item4.count});
+       }
     }
 
 
-render(){
+    if (issue_Compatibility != null) {
+        issue_Compatibility.forEach((error) => {
+        compatibilityIssuesByType[error.type] = compatibilityIssuesByType[error.type] || [];
+        compatibilityIssuesByTest[error.test] = compatibilityIssuesByTest[error.test] || [];
+        compatibilityIssuesByType[error.type].push(error);
+        compatibilityIssuesByTest[error.test].push(error);
+        });
+        //Caculating error/warning / notice / critical count
+        if(compatibilityIssuesByType.warning){
+           compatibilityIssuesByType.warning.map((item)=>{ compatibility_issues_warning_count +=item.count});
+          }
+          if(compatibilityIssuesByType.error){
+          compatibilityIssuesByType.error.map((item)=>{ compatibility_issues_error_count +=item.count});
+          }
+          if(compatibilityIssuesByType.critical){
+          compatibilityIssuesByType.critical.map((item)=>{ compatibility_issues_critical_count +=item.count});
+          }
+          if (compatibilityIssuesByType.notice) {
+            compatibilityIssuesByType.notice.map((item)=>{ compatibility_issues_notice_count +=item.count});
+       }
+      }
 
- var  imgPath = 'images/'+this.props.test.desktop.screenshotPath;
- var s = Number(this.props.test.desktop.score);
- let isLoading = this.state.isLoading;
-return(
- <Well style={{marginTop : '45px'}} className="centered">
-   <Row >
-   <Col xs={12} md={6} mdOffset={3} >
-       <div >
-         <FormErrors formErrors={this.state.formErrors} />
-       </div>
-     </Col>
-   </Row>
-       {/* SEARCH FORM GOES HERE.....*/}
-       <Row>
-       <Col xs={12} md={10} mdOffset={1}>
-         <Form onKeyPress={e => {if (e.key === 'Enter') e.preventDefault();}} >
-               <FormGroup controlId="url"   validationState={(this.props.loading==false)?(null):this.getValidationState('url')} >
-                 <Col xs={12} sm={8} >
-               <FormControl type="text" placeholder="Enter URL" ref="url" name="url"
-                 onChange={this.handleChange.bind(this)} />
-                 <FormControl.Feedback />
-                 </Col>
-             </FormGroup>
-             <Col xs={12} sm={2}>
-             <FormGroup controlId="formControlsSelect" validationState={(this.props.loading==false)?(null):this.getValidationState('strategy')}>
-             <FormControl   componentClass="select" placeholder="select" ref="delete" onChange={this.strategyHandle.bind(this)} value={this.state.strategy}>
-               <option value="desktop">Desktop</option>
-               <option value="mobile">Mobile</option>
-             </FormControl>
-             </FormGroup>
-         </Col>
-               <Col xs={12} sm={2} >
-               <Button
-                 onClick={(!isLoading || this.props.loading==true)?(this.handleSubmit.bind(this)):(null) }
-                 bsStyle={(!this.state.submitBTN)?('default'):('primary')}
-                 disabled={!this.state.submitBTN} >
-                 {(!isLoading || this.props.loading==true)?('Test it'):('Analyzing...')}
+
+
+
+<Issue_generator contentIssuesByTest={contentIssuesByTest}  content_issue_list={content_issue_list} partialHtml={partialHtml}  />
+
+
+      //Creating Security Issues List
+
+        for (var key in contentIssuesByTest) {
+          if (!contentIssuesByTest.hasOwnProperty(key))
+            continue;
+            var arr = contentIssuesByTest[key];
+            var title = contentIssuesByTest[key][0].test;
+            partialHtml = arr.map((items, i)=>{
+                 return(
+                   <tr key={'ph' + i}>
+                     <td className="col-md-1">
+                       <div className="box">
+                         <span>{items.count}</span>
+                       </div>
+                     </td>
+                     <td className="col-md-1">{items.impact.toFixed(2)}</td>
+                     <td className="col-md-10">{items.message}</td>
+                   </tr>
+                 );
+            });
+
+          var fullHtml = (
+          <div key={'fh' + content_issue_list.length}>
+            <div className="report-group-header">
+              <h4>{title}</h4>
+            </div>
+            <div className="table-responsive">
+              <table className="table ">
+                  <thead>
+                    <tr >
+                      <td >Count</td>
+                      <td >Imapct</td>
+                      <td >Rule</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {partialHtml}
+                  </tbody>
+              </table>
+            </div>
+          </div>
+          )
+          content_issue_list.push(fullHtml);
+      }
+
+      //Creating Security Issues List
+
+        for (var key in securityIssuesByTest) {
+            if (!securityIssuesByTest.hasOwnProperty(key))
+              continue;
+              var arr = securityIssuesByTest[key];
+              var title = securityIssuesByTest[key][0].test;
+              partialHtml = arr.map((items, i)=>{
+                   return(
+                     <tr key={'ph' + i}>
+                       <td className="col-md-1">
+                         <div className="box">
+                           <span>{items.count}</span>
+                         </div>
+                       </td>
+                       <td className="col-md-1">{items.impact.toFixed(2)}</td>
+                       <td className="col-md-10">{items.message}</td>
+                     </tr>
+                   );
+              });
+
+            var fullHtml = (
+            <div key={'fh' + security_issue_list.length}>
+              <div className="report-group-header">
+                <h4>{title}</h4>
+              </div>
+              <div className="table-responsive">
+                <table className="table ">
+                    <thead>
+                      <tr >
+                        <td >Count</td>
+                        <td >Imapct</td>
+                        <td >Rule</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {partialHtml}
+                    </tbody>
+                </table>
+              </div>
+            </div>
+          )
+            security_issue_list.push(fullHtml);
+        }
+
+      //Creating Perforance Issues List
+
+        for (var key in performanceIssuesByTest) {
+          if (!performanceIssuesByTest.hasOwnProperty(key))
+            continue;
+            var arr = performanceIssuesByTest[key];
+            var title = performanceIssuesByTest[key][0].test;
+            partialHtml = arr.map((items, i)=>{
+                 return(
+                   <tr key={'ph' + i}>
+                     <td className="col-md-1">
+                       <div className="box">
+                         <span>{items.count}</span>
+                       </div>
+                     </td>
+                     <td className="col-md-1">{items.impact.toFixed(2)}</td>
+                     <td className="col-md-10">{items.message}</td>
+                   </tr>
+                 );
+          });
+
+
+            var fullHtml = (
+            <div key={'fh' + performance_issue_list.length}>
+              <div className="report-group-header">
+                <h4>{title}</h4>
+              </div>
+              <div className="table-responsive">
+                <table className="table ">
+                    <thead>
+                      <tr >
+                        <td >Count</td>
+                        <td >Imapct</td>
+                        <td >Rule</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {partialHtml}
+                    </tbody>
+                </table>
+              </div>
+            </div>
+          )
+            performance_issue_list.push(fullHtml);
+        }
+
+      //Creating Compatibility Issues List
+
+        for (var key in compatibilityIssuesByTest) {
+          if (!compatibilityIssuesByTest.hasOwnProperty(key))
+            continue;
+            var arr = compatibilityIssuesByTest[key];
+            var title = compatibilityIssuesByTest[key][0].test;
+            partialHtml = arr.map((items, i)=>{
+                 return(
+                   <tr key={'ph' + i}>
+                     <td className="col-md-1">
+                       <div className="box">
+                         <span>{items.count}</span>
+                       </div>
+                     </td>
+                     <td className="col-md-1">{items.impact.toFixed(2)}</td>
+                     <td className="col-md-10">{items.message}</td>
+                   </tr>
+                 );
+            });
+
+
+          var fullHtml = (
+          <div key={'fh' + compatibility_issue_list.length}>
+            <div className="report-group-header">
+              <h4>{title}</h4>
+            </div>
+            <div className="table-responsive">
+              <table className="table ">
+                  <thead>
+                    <tr >
+                      <td >Count</td>
+                      <td >Imapct</td>
+                      <td >Rule</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {partialHtml}
+                  </tbody>
+              </table>
+            </div>
+          </div>
+        )
+          compatibility_issue_list.push(fullHtml);
+      }
+
+
+ //Creating compatibility overall SCORE
+
+if(stats_By_Category.compatibility != undefined){
+  stats_By_Category.compatibility.map((item)=>{
+    compatibility_Score += item.score
+  });
+  compatibility_Score = (compatibility_Score/(stats_By_Category.compatibility.length)).toFixed(2);
+}
+
+
+//Creating security overall SCORE
+
+if(stats_By_Category.security != undefined){
+ stats_By_Category.security.map((item)=>{
+   security_Score += item.score
+ });
+ security_Score = (security_Score/(stats_By_Category.security.length)).toFixed(2);
+}
+
+//Creating content overall SCORE
+
+if(stats_By_Category.content != undefined){
+ stats_By_Category.content.map((item)=>{
+   content_Score += item.score
+ });
+ content_Score = (content_Score/(stats_By_Category.content.length)).toFixed(2);
+}
+
+//Creating performance overall SCORE
+
+if(stats_By_Category.performance != undefined){
+ stats_By_Category.performance.map((item)=>{
+   performance_Score += item.score
+ });
+ performance_Score = (performance_Score/(stats_By_Category.performance.length)).toFixed(2);
+}
+
+
+    return (
+      <div>
+
+        <div className="alert alert-warning report-alert">
+          <p>This test represents only 1 page on the site, scan the website for a full report.</p>
+        </div>
+
+        <div id="url-submit-bg">
+          <div className="inner">
+            <Col xs={12} sm={8} smOffset={2}>
+              <Form inline onKeyPress={e => {
+                if (e.key === 'Enter')
+                  e.preventDefault();
+                }}>
+
+                <FormGroup controlId="url" validationState={(this.props.loading == false)
+                  ? (null)
+                  : this.getValidationState('url')}>
+
+                  <FormControl type="text" placeholder="Enter URL" ref="url" name="url" onChange={this.handleChange.bind(this)} bsClass='form-control url-submit'/>
+                  <FormControl.Feedback/>
+                </FormGroup>
+
+                <Button onClick={(!isLoading || this.props.loading == true)
+                  ? (this.handleSubmit.bind(this))
+                  : (null)} bsClass='home-btn' disabled={!this.state.submitBTN}>
+                  {(!isLoading || this.props.loading == true)
+                    ? ('Test it')
+                    : ('Analyzing...')}
                 </Button>
-              </Col>
-           </Form>
-       </Col>
-       </Row>
-   <Row className={this.props.loading==true ? 'show' : 'hidden'}>
-     <Panel>
-       <Col xs={12} >
-         <h3 className='heading'>Test Result for : {this.props.test.desktop.targeturl} </h3>
-         <Panel style={{marginTop : '45px'}}>
-           <Col xs={6}>
-             <p>PAGE TITLE : {this.props.test.desktop.title}</p>
-             <p>PAGE SPEED SCORE :  <Label bsStyle={(this.props.test.desktop.score <90)?('warning'):('success')}>{this.props.test.desktop.score} </Label></p>
-             <p>HTML RESPONSE BYTES : <Label>{this.props.test.desktop.htmlResponseBytes} </Label> </p>
-             <p>CSS RESPONSE BYTES : <Label>{this.props.test.desktop.cssResponseBytes}</Label> </p>
-             <p>IMAGE RESPONSE BYTES : <Label>{this.props.test.desktop.imageResponseBytes}</Label> </p>
-             <p>JS RESPONSE BYTES : <Label>{this.props.test.desktop.javascriptResponseBytes}</Label> </p>
-           </Col>
-           <Col xs={6}>
-             <div className='screenshot-macbook'>
-                 <Image src ={imgPath} />
-             </div>
-           </Col>
-         </Panel>
-       </Col>
 
-       <Col xs={12}>
-         <Table striped bordered condensed hover>
-            <thead>
-              <tr>
-                <th>Analyzed Item</th>
-                <th>Summary</th>
-                <th>Imapct</th>
-                <th>is Optimized ?</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{this.props.test.desktop.LandingPageRedirectsName}</td>
-                <td>{this.props.test.desktop.LandingPageRedirectsSummary}</td>
-                <td>{this.props.test.desktop.LandingPageRedirectsImpact}</td>
-                <td>{(this.props.test.desktop.LandingPageRedirectsImpact > 0)?(<Image src='images/cancel.png'/>):(<ProgressBar now={100} label={`${100}%`} bsStyle='success'  active />)}</td>
-              </tr>
-              <tr>
-                <td>{this.props.test.desktop.EnableGzipCompressionName}</td>
-                <td>{this.props.test.desktop.EnableGzipCompressionSummary}</td>
-                <td>{(this.props.test.desktop.EnableGzipCompressionImpact)}</td>
-                <td style={{textAlign:'center'}}>{(this.props.test.desktop.EnableGzipCompressionImpact > 0)?(<Image src='images/cancel.png'/>):(<ProgressBar now={100} label={`${100}%`} bsStyle='success'  active />)}</td>
-              </tr>
-              <tr>
-                <td>{this.props.test.desktop.LeverageBrowserCachingName}</td>
-                <td>{this.props.test.desktop.LeverageBrowserCachingSummary}</td>
-                <td>{this.props.test.desktop.LeverageBrowserCachingImpact}</td>
-                <td style={{textAlign:'center'}}>{(this.props.test.desktop.LeverageBrowserCachingImpact > 0)?(<Image src='images/cancel.png'/>):(<ProgressBar now={100} label={`${100}%`} bsStyle='success'  active />)}</td>
-              </tr>
-              <tr>
-                <td>{this.props.test.desktop.ServerResponseTimeName}</td>
-                <td>{this.props.test.desktop.ServerResponseTimeSummary}</td>
-                <td>{this.props.test.desktop.ServerResponseTimeImpact}</td>
-                <td style={{textAlign:'center'}}>{(this.props.test.desktop.ServerResponseTimeImpact > 0)?(<Image src='images/cancel.png'/>):(<ProgressBar now={100} label={`${100}%`} bsStyle='success'  active />)}</td>
-              </tr>
-              <tr>
-                <td>{this.props.test.desktop.MinifyCssName}</td>
-                <td>{this.props.test.desktop.MinifyCssSummary}</td>
-                <td>{this.props.test.desktop.MinifyCssImpact}</td>
-                <td style={{textAlign:'center'}}>{(this.props.test.desktop.MinifyCssImpact > 0)?(<Image src='images/cancel.png'/>):(<ProgressBar now={100} label={`${100}%`} bsStyle='success'  active />)}</td>
-              </tr>
-              <tr>
-                <td>{this.props.test.desktop.MinifyHTMLName}</td>
-                <td>{this.props.test.desktop.MinifyHTMLSummary}</td>
-                <td>{this.props.test.desktop.MinifyHTMLImpact}</td>
-                <td style={{textAlign:'center'}}>{(this.props.test.desktop.MinifyHTMLImpact > 0)?(<Image src='images/cancel.png'/>):(<ProgressBar now={100} label={`${100}%`} bsStyle='success'  active />)}</td>
-              </tr>
-              <tr>
-                <td>{this.props.test.desktop.MinifyJavaScriptName}</td>
-                <td>{this.props.test.desktop.MinifyJavaScriptSummary}</td>
-                <td>{this.props.test.desktop.MinifyJavaScriptImpact}</td>
-                <td style={{textAlign:'center'}}>{(this.props.test.desktop.MinifyJavaScriptImpact > 0)?(<Image src='images/cancel.png'/>):(<ProgressBar now={100} label={`${100}%`} bsStyle='success'  active />)}</td>
-              </tr>
+              </Form>
 
-              <tr>
-                <td>{this.props.test.desktop.MinimizeRenderBlockingName}</td>
-                <td>{this.props.test.desktop.MinimizeRenderBlockingSummary}</td>
-                <td>{this.props.test.desktop.MinimizeRenderBlockingImpact}</td>
-                <td style={{textAlign:'center'}}>{(this.props.test.desktop.MinimizeRenderBlockingImpact > 0)?(<Image src='images/cancel.png'/>):(<ProgressBar now={100} label={`${100}%`} bsStyle='success'  active />)}</td>
-              </tr>
+            </Col>
+          </div>
+        </div>
 
-              <tr>
-                <td>{this.props.test.desktop.OptimizeImagesName}</td>
-                <td>{this.props.test.desktop.OptimizeImagesSummary}</td>
-                <td>{this.props.test.desktop.OptimizeImagesImpact}</td>
-                <td style={{textAlign:'center'}}>{(this.props.test.desktop.OptimizeImagesImpact > 0)?(<Image src='images/cancel.png'/>):(<ProgressBar now={100} label={`${100}%`} bsStyle='success'  active />)}</td>
-              </tr>
+        <div className="container-inner">
+          <div className="row">
+            <div className="space-sm"></div>
+            <h2 className="report_title">{Report_url}</h2>
+            <hr/>
+            <div className="space-md"></div>
+            <div className="table-responsive" id="report-summary-table">
+              <table className="table">
 
-              <tr>
-                <td>{this.props.test.desktop.PrioritizeVisibleContentName}</td>
-                <td>{this.props.test.desktop.PrioritizeVisibleContentSummary}</td>
-                <td>{this.props.test.desktop.PrioritizeVisibleContentImpact}</td>
-                <td style={{textAlign:'center'}}>{(this.props.test.desktop.PrioritizeVisibleContentImpact >0)?(<Image src='images/cancel.png'/>):(<ProgressBar now={100} label={`${100}%`} bsStyle='success'  active />)}</td>
-              </tr>
+                <thead>
+                  <tr className="center">
+                    <td >PAGE SCORE</td>
+                    <td >PAGES</td>
+                    <td >ISSUES</td>
+                    <td >SPEED</td>
+                    <td >SIZE</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="center">
+                    <td >
+                      <img src="/images/favicon.png" className="report-logo"/>
+                      <span className="current-score">{page_Score}</span>/100
+                    </td>
+                    <td >
+                      <p className="report-sub-scores">1 Page</p>
+                      <p className="report-sub-content">{test_Number}
+                        tests</p>
+                    </td>
+                    <td >
+                      <p className="report-sub-scores">{total_Issues}</p>
+                      <p className="report-sub-content">{critical_Number}
+                        <span className="hori-space"></span>
+                         criticals</p>
+                      <p className="report-sub-content">{error_Number}
+                        <span className="hori-space"></span>
+                        errors</p>
+                      <p className="report-sub-content">{warning_Number}
+                        <span className="hori-space"></span>
+                         warnings</p>
+                      <p className="report-sub-content">{notice_Number}
+                        <span className="hori-space"></span>
+                         notices</p>
+                    </td>
+                    <td >
+                      <img src="/images/turtle256.png" className="report-small-icon"/>
+                      <span className="report-sub-scores">{page_Speed / 1000}
+                        s</span>
+                    </td>
+                    <td >
+                      <img src="/images/feather256.png" className="report-small-icon"/>
+                      <span className="report-sub-scores">{(page_Size / 1000000).toFixed(2)}
+                        mb</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="report-summary-mobile">
+              <div className="row">
+                <div className="col-xs-12">
+                  <img src="/images/favicon.png" className="report-logo"/>
+                  <span className="current-score">{page_Score}</span>/100
+                </div>
+                <div className="space-md"></div>
+                <div className="col-xs-3">
+                  <p>Pages</p>
+                  <p>1</p>
+                </div>
+                <div className="col-xs-3">
+                  <p>Issues</p>
+                  <p>{total_Issues}</p>
+                </div>
+                <div className="col-xs-3">
+                  <p>Speed</p>
+                  <p>{(page_Speed / 1000).toFixed(2)}</p>
+                </div>
+                <div className="col-xs-3">
+                  <p>Size</p>
+                  <p>{(page_Size / 1000000).toFixed(2)}kb</p>
+                </div>
+              </div>
+              <hr/>
+            </div>
+          </div>
+        </div>
 
-              <tr>
-                <td>{this.props.test.desktop.PrioritizeVisibleContentName}</td>
-                <td>{this.props.test.desktop.PrioritizeVisibleContentSummary}</td>
-                <td>{this.props.test.desktop.PrioritizeVisibleContentImpact}</td>
-                <td style={{textAlign:'center'}}>{(this.props.test.desktop.PrioritizeVisibleContentImpact > 0)?(<Image src='images/cancel.png'/>):(<ProgressBar now={100} label={`${100}%`} bsStyle='success'  active />)}</td>
-              </tr>
+        <div className="space-sm"></div>
+        <div className="well" id="filmstrip-container">
+          <div className="container-inner ">
+            <div className="row">
+              <div className="col-xs-12 col-sm-6 text-left">
+                <p>BROWSER RENDER JOURNEY</p>
+              </div>
+              <div className="col-xs-12 col-sm-6 text-right">
+                <p>LAST RENDER AT : {firstRender}s</p>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-xs-12">
+                <div className="container-inner report-screenshot-scroll">
+                  <div className="row text-center">
+                    { filmstrips }
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-            </tbody>
-          </Table>
-   </Col>
-     </Panel>
-   </Row>
+        <div className="well" id="report-tab-container"></div>
 
-<LoadingModal show={this.state.isLoading} />
+        <div className="container-inner">
+          <div className="row" id="report-tab-row">
+            <div id="report-tab-wrapper">
 
-</Well>
-)
+              <Tabs activeKey={Number(this.state.defaultkey)} onSelect={this.handleTabSelect.bind(this)} id="controlled-tab-example">
+                <Tab eventKey={1} title="OVERVIEW">
+                  <div className="vdivide">
+                    <div className="col-xs-12 col-sm-6 col-md-3 text-center">
+                      <h1>{performance_Score}%</h1>
+                      <p>Performance</p>
+                      <img src="/images/performance.png" className="report-col-img"/>
+
+                      <p className="report-sub-content">{(performanceIssuesByType.critical != null)
+                          ? (performance_issues_critical_count)
+                          : ('0')}
+                        <span className="hori-space"></span> critical</p>
+
+                      <p className="report-sub-content">{(performanceIssuesByType.error != null)
+                          ? (performance_issues_error_count)
+                          : ('0')}
+                        <span className="hori-space"></span>   errors</p>
+
+                      <p className="report-sub-content">{(performanceIssuesByType.warning != null)
+                          ? (performance_issues_warning_count)
+                          : ('0')}
+                        <span className="hori-space"></span>  warnings</p>
+
+                      <p className="report-sub-content">{(performanceIssuesByType.notice != null)
+                          ? (performance_issues_notice_count)
+                          : ('0')}
+                        <span className="hori-space"></span>  notices</p>
+
+                          <div className="space-sm"></div>
+                            <Button bsSize="large" bsStyle="primary" onClick={this.handleTab.bind(this,3)}>
+                            VIEW FULL REPORT
+                            </Button>
+                      <hr className="mobile-hr"/>
+                    </div>
+
+                    <div className="col-xs-12 col-sm-6 col-md-3 text-center">
+                      <h1>{compatibility_Score}%</h1>
+                      <p>Compatibility</p>
+                      <img src="/images/compatibility.png" className="report-col-img"/>
+
+                      <p className="report-sub-content">{(compatibilityIssuesByType.critical != null)
+                          ? (compatibility_issues_critical_count)
+                          : ('0')}
+                        <span className="hori-space"></span>  critical</p>
+
+                      <p className="report-sub-content">{(compatibilityIssuesByType.error != null)
+                          ? (compatibility_issues_error_count)
+                          : ('0')}
+                        <span className="hori-space"></span>  errors</p>
+
+                      <p className="report-sub-content">{(compatibilityIssuesByType.warning != null)
+                          ? (compatibility_issues_warning_count)
+                          : ('0')}
+                        <span className="hori-space"></span>  warnings</p>
+
+                      <p className="report-sub-content">{(compatibilityIssuesByType.notice != null)
+                          ? (compatibility_issues_notice_count)
+                          : ('0')}
+                        <span className="hori-space"></span>  notices</p>
+                          <div className="space-sm"></div>
+                          <Button bsSize="large" bsStyle="primary" onClick={this.handleTab.bind(this,4)}>
+                          VIEW FULL REPORT
+                          </Button>
+                      <hr className="mobile-hr"/>
+                    </div>
+                    <div className="col-xs-12 col-sm-6 col-md-3 text-center">
+                      <h1>{content_Score}%</h1>
+                      <p>Content</p>
+                      <img src="/images/content.png" className="report-col-img"/>
+
+                      <p className="report-sub-content">{(contentIssuesByType.critical != null)
+                          ? (content_issues_critical_count)
+                          : ('0')}
+                        <span className="hori-space"></span>  critical</p>
+
+                      <p className="report-sub-content">{(contentIssuesByType.error != null)
+                          ? (content_issues_error_count)
+                          : ('0')}
+                        <span className="hori-space"></span>  errors</p>
+
+                      <p className="report-sub-content">{(contentIssuesByType.warning != null)
+                          ? (content_issues_warning_count)
+                          : ('0')}
+                        <span className="hori-space"></span>  warnings</p>
+
+                      <p className="report-sub-content">{(contentIssuesByType.notice != null)
+                          ? (content_issues_notice_count)
+                          : ('0')}
+                        <span className="hori-space"></span>  notices</p>
+                        <div className="space-sm"></div>
+                          <Button bsSize="large" bsStyle="primary" onClick={this.handleTab.bind(this,5)}>
+                          VIEW FULL REPORT
+                          </Button>
+                      <hr className="mobile-hr"/>
+                    </div>
+
+                    <div className="col-xs-12 col-sm-6 col-md-3 text-center">
+                      <h1>{security_Score}%</h1>
+                      <p>Security</p>
+                      <img src="/images/security.png" className="report-col-img"/>
+
+                      <p className="report-sub-content">{(securityIssuesByType.critical != null)
+                          ? (security_issues_critical_count)
+                          : ('0')}
+                        <span className="hori-space"></span>  critical</p>
+
+                      <p className="report-sub-content">{(securityIssuesByType.error != null)
+                          ? (security_issues_error_count)
+                          : ('0')}
+                        <span className="hori-space"></span>  errors</p>
+
+                      <p className="report-sub-content">{(securityIssuesByType.warning != null)
+                          ? (security_issues_warning_count)
+                          : ('0')}
+                        <span className="hori-space"></span>  warnings</p>
+
+                      <p className="report-sub-content">{(securityIssuesByType.notice != null)
+                          ? (security_issues_notice_count)
+                          : ('0')}
+                        <span className="hori-space"></span>  notices</p>
+                        <div className="space-sm"></div>
+                          <Button bsSize="large" bsStyle="primary" onClick={this.handleTab.bind(this,6)}>
+                          VIEW FULL REPORT
+                          </Button>
+                    </div>
+                  </div>
+
+                </Tab>
+
+                <Tab eventKey={2} title="ISSUES">
+                  <div className="grouped">
+
+                  {performance_issue_list}
+                  {compatibility_issue_list}
+                  {content_issue_list}
+                  {security_issue_list}
+
+                  </div>
+                </Tab>
+                <Tab eventKey={3} title="PERFORMANCE" >
+                  <div className="grouped">
+
+                    {performance_issue_list}
+                  </div>
+
+                </Tab>
+                <Tab eventKey={4} title="COMPATIBILITY" >
+                  <div className="grouped">
+
+                    {compatibility_issue_list}
+                  </div>
+
+                </Tab>
+                <Tab eventKey={5} title="CONTENT" >
+                  <div className="grouped">
+
+                    {content_issue_list}
+                  </div>
+                </Tab>
+                <Tab eventKey={6} title="SECURITY" >
+                  <div className="grouped">
+
+                    {security_issue_list}
+
+                  </div>
+                </Tab>
+              </Tabs>
+
+            </div>
+          </div>
+
+          <div className="space-lg"></div>
+        </div>
+
+      <LoadingModal show={this.state.isLoading} />
+      <LoadingModal show={this.state.isLoading} />
+
+
+        <Modal  show={this.state.filmstripModal}  onHide={this.modalClose.bind(this)}>
+         <Modal.Header>
+           <Modal.Title>FILMSTRIPE</Modal.Title>
+         </Modal.Header>
+
+         <Modal.Body className="modal_center">
+           <img src={this.state.filmStripImg} width="500" />
+
+         </Modal.Body>
+
+       </Modal>
+
+      </div>
+    )
+  }
 }
-}
 
-
-function mapStateToProps(state){
-return {
-loading : state.test.isLoading,
-test : state.test.test
+function mapStateToProps(state) {
+  return {loading: state.test.isLoading, test: state.test.test}
 }
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    testUrl
+  }, dispatch)
 }
-function mapDispatchToProps(dispatch){
-return bindActionCreators({
-testUrl}, dispatch)
-}
-export default connect(mapStateToProps,
-mapDispatchToProps)(currentResultDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(currentResultDetail);

@@ -1,15 +1,20 @@
 import {combineReducers} from 'redux'
-import {booksReducers} from './booksReducers';
-import {cartReducers} from './cartReducers';
-import {urlReducers} from './urlReducers';
-import {allTestsReducers} from './allTestsReducers';
-//import {loadMoreReducers} from './loadMoreReducers';
-import {resultDetailsReducers} from './resultDetailsReducers';
+
+import {reportReducer} from './reportReducers';
+import {allTestsReducer} from './reportReducers';
+import {oldReportReducer} from './reportReducers';
+import {userProfileReducers} from './userProfile';
+import{authentication} from './authentication';
+import {reducer as formReducer} from 'redux-form';
+
+
 export default combineReducers({
-  books : booksReducers,
-  cart : cartReducers,
-  test : urlReducers,
-  allTests : allTestsReducers,
-//  loadMore : loadMoreReducers,
-  resultDetails : resultDetailsReducers
+
+  test : reportReducer,
+  allTests : allTestsReducer,
+  oldReport : oldReportReducer,
+  profile : userProfileReducers,
+  auth : authentication,
+
+
 })

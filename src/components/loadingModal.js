@@ -9,8 +9,9 @@ const loadingModal = (props) => {
          <Modal.Title>Your Request is being executed ..</Modal.Title>
        </Modal.Header>
 
-       <Modal.Body>
-         <Loading />
+       <Modal.Body className="modal_center">
+           <Loading />
+
        </Modal.Body>
 
      </Modal>

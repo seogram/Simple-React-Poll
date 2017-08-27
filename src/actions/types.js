@@ -1,0 +1,14 @@
+export const AUTH_USER = 'auth_user';
+export const UNAUTH_USER = 'unauth_user';
+export const SIGN_UP_AUTH_ERROR = 'auth_error';
+export const FETCH_MESSAGE = 'fetch_message';
+export const SIGN_IN_AUTH_ERROR = 'fetch_message';
+export const PENDING_USER = 'pending_user';
+export const ACTIVATED_USER = 'activated_user';
+export const USER_ACTIVATION_ERROR = 'user_activation_error';
+export const UNACTIVATED_USER = 'unactivated_user';
+export const FORGOT_PASSWORD = 'forgot_user';
+export const FORGOT_PASSWORD_ERROR = 'forgot_user_error';
+export const UNRESET_PASSWORD = 'unreset_password';
+export const RESET_PASSWORD = 'reset_password';
+export const RESET_PASSWORD_ERROR = 'reset_password_error';
