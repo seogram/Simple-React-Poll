@@ -1,7 +1,7 @@
 const jwt = require('jwt-simple');
 const User = require('../models/user');
 const config = require('../config/authentication');
-const randomString = require('randomstring');
+
 const mailer = require('../services/mailer');
 
 function tokenForUser(user) {
