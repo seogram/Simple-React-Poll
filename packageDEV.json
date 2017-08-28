@@ -8,7 +8,6 @@
   "scripts": {
     "start": "node ./index.js",
     "watch": "webpack",
-
     "forever": "NODE_ENV=production forever ./index.js",
     "build": "webpack -p --config ./webpack.config.prod.js",
     "test": "echo test"

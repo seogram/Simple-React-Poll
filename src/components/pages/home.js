@@ -101,7 +101,7 @@ render(){
   let isLoading = this.state.isLoading;
 return(
 <div>
-  <header id="first">
+  <header >
           <div className="header-content">
               <div className="inner">
                   <h1 >Security. Performance. Compatibility. SEO.</h1>
