@@ -10,7 +10,7 @@
     "watch": "webpack",
     "build": "webpack -p --config ./webpack.config.prod.js",
     "test": "echo test"
-    },
+  },
   "dependencies": {
     "axios": "^0.16.2",
     "babel-core": "^6.26.0",
@@ -29,6 +29,7 @@
     "ejs": "^2.5.7",
     "express": "^4.15.4",
     "express-session": "^1.15.5",
+    "forever": "^0.15.3",
     "http-proxy": "^1.16.2",
     "is-url-superb": "^2.0.0",
     "jade": "^1.11.0",
@@ -58,7 +59,6 @@
     "validator": "^8.1.0"
   },
   "devDependencies": {
-    "forever": "^0.15.3",
     "nodemon": "^1.11.0",
     "redux-logger": "^3.0.6",
     "webpack": "^3.5.5"
