@@ -9,7 +9,10 @@ module.exports = {
     url:    targeturl,
       token : 'PM_10ed7f3078a011e7a46985aa61769a0d5991501801453219'
     //  token:   'PM_72dc0050757a11e7bfd8797c6d1b46895961501455443157'
-    }).on('done', function(result) {
+  }).on('done', function(result) {
+    // if(err){
+    //   res.json(err);
+    // }
 
     result = result.toJSON();
     let issues = result.issues;
