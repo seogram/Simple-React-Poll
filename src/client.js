@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 import {createStore , applyMiddleware,compose} from 'redux';
 import { Provider } from 'react-redux';
 import {Router, Route, IndexRoute,browserHistory} from 'react-router';
-import reducers from './reducers/index';
 import {render} from 'react-dom';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';

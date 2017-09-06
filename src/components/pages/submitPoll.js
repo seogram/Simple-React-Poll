@@ -1,12 +1,8 @@
 
   import React from 'react';
   import {InputGroup, Col, Row, Well, Panel,ProgressBar, Form ,FormControl,FormGroup, ControlLabel,ButtonGroup , Button,Label,Table,Alert,Modal} from 'react-bootstrap';
-  import {connect} from 'react-redux';
   import { Link } from 'react-router';
   import { browserHistory } from 'react-router'
-  import {bindActionCreators} from 'redux';
-  import {findDOMNode} from 'react-dom';
-  var isUrl = require('is-url-superb');
   var pollsApi = require("../../pollsApi");
 
 
@@ -38,12 +34,9 @@ handleChange(e){
 handleChangeChoice(e){
 
   let offset = e.target.name.split("choice").pop();
-
   let choices = this.state.choices;
-
   if(choices[offset])
     choices[offset] = e.target.value;
-
   this.setState({
     choices
   });
