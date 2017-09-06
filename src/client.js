@@ -11,16 +11,14 @@ import thunk from 'redux-thunk';
 import home  from './components/pages/home';
 import detail from './components/pages/detail';
 import submit from './components/pages/submitPoll';
-
 import Main from  './main';
 
-
-const middleWare = applyMiddleware(logger,thunk);
-const store = createStore(reducers,middleWare);
+// const middleWare = applyMiddleware(logger,thunk);
+// const store = createStore(reducers,middleWare);
 
 
 const Routes = (
-<Provider store={store}>
+
   <Router history={browserHistory}>
     <Route path="/" component={Main}>
       <IndexRoute component={home}/>
@@ -30,7 +28,7 @@ const Routes = (
       <Route path="*" component={home} />
     </Route>
   </Router>
-</Provider>
+
 )
 ReactDOM.render(
   Routes,document.getElementById('root')

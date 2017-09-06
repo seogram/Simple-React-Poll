@@ -18,13 +18,11 @@ class Menu extends React.Component{
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav>
-              <NavItem eventKey={1} href="#">About</NavItem>
+              <LinkContainer to={{ pathname: '/submit' }}>
+              <NavItem eventKey={1} >Submit Poll</NavItem>
+              </LinkContainer>
             </Nav>
-                <Nav pullRight>
-                <LinkContainer to={{ pathname: '/signin' }}>
-                <NavItem eventKey={1} href="#">LOG IN / REGISTER</NavItem>
-                </LinkContainer>
-            </Nav>
+              
           </Navbar.Collapse>
         </Navbar>
       );

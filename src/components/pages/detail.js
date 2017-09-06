@@ -6,7 +6,6 @@
   import { browserHistory } from 'react-router'
   import {bindActionCreators} from 'redux';
   import {findDOMNode} from 'react-dom';
-  import HomeSubContent from '../home-sub-content';
   var isUrl = require('is-url-superb');
   var pollsApi = require("../../pollsApi");
 
@@ -45,7 +44,11 @@ render(){
       pollList = this.state.poll.choices.map((item,i)=>{
         choice = item.choice  ;
         vote = parseInt(item.votes);
-        percent = ((vote / voteSum)*100).toFixed(2);
+        if(vote > 0 && voteSum > 0){
+          percent = ((vote / voteSum)*100).toFixed(2);
+        }else{
+          percent = 0;
+        }
 
         return(
           <tr key={i}>

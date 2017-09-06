@@ -7,7 +7,6 @@
   import { browserHistory } from 'react-router'
   import {bindActionCreators} from 'redux';
   import {findDOMNode} from 'react-dom';
-  import HomeSubContent from '../home-sub-content';
   var isUrl = require('is-url-superb');
   var pollsApi = require("../../pollsApi");
 
@@ -33,7 +32,7 @@ class Home extends React.Component{
 
 render(){
 
-  const polls = this.state.polls.map((poll)=>{
+  const polls = this.state.polls.map((poll,i)=>{
 
   let  d = new Date(poll.published_at),
        newDate =  [d.getDate(), d.getMonth()+1, d.getFullYear()].join('/'),
@@ -42,7 +41,7 @@ render(){
 
 
     return(
-      <Col sm={6} md={3}>
+      <Col sm={6} md={3} key={i}>
         <Panel header={newDate}>
 
           <Link to={'detail/' + poll.url.split("/").pop()}>{title}</Link>
