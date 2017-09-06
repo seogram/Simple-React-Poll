@@ -23,6 +23,31 @@ body {
       /*position: relative;*/
 }
 
+.fullheight {
+  min-height : 700px;
+  height : 100%;
+}
+
+.timeout {
+  margin: 0 auto;
+  background-color: #e6e8e6;
+}
+.timeout img {
+  height: 150px;
+  text-align: center;
+}
+.timeout p {
+  border-top-right-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+  border-bottom-left-radius: 8px !important;
+  border-top-left-radius: 8px !important;
+  padding: 3.5 10rem;
+  margin : 0 auto;
+  width : 30%;
+      background-color: #f23754;
+      color : #fff;
+}
+
 hr {
     max-width: 200px;
     border-width: 3px;
@@ -45,7 +70,7 @@ hr {
 
 
 a {
-    color: #111;
+
     -webkit-transition: all .35s;
     -moz-transition: all .35s;
     transition: all .35s;
@@ -70,6 +95,8 @@ p {
 .clickableRow {
   cursor: pointer;
 }
+
+
 .space-lg {
   padding : 5rem 0 ;
 }
@@ -94,6 +121,10 @@ p {
 }
 .center {
   text-align: center;
+}
+
+.center-margin {
+  margin : 0 auto;
 }
 
 .loader {
@@ -151,12 +182,11 @@ margin : 0 auto;
     color: #9c27b0;
 }
 
-/*.modal-content {
-    background-color: #1d1d1d;
-}*/
 
-.modal_center {
-  text-align: center;
+.custom-modal {
+  width : 90%;
+  text-align: left !important;
+  overflow: hidden !important;
 }
 
 section {
@@ -196,29 +226,29 @@ aside {
 #footer {
     display: block;
     width: 100%;
-    height : 4rem;
+    height : 6rem;
     background-color: #141414;
     border-top: 1px solid #171717;
-    padding: 10px 0;
     font-size: 1.2rem;
     color :black;
 }
 
-#footer-container {
+/*#footer-container {
   max-width: 920px;
   margin: 0 auto;
 
-}
+}*/
 
 .no-padding {
     padding: 0;
 }
 
 .navbar-profile {
+  float: left;
   height: 35px;
   width: 35px;
   margin-top : -1.3rem !important;
-  margin-right: 0px;
+  margin-right: 2.5rem;
   border-radius: 34px;
 }
 
@@ -400,7 +430,7 @@ header {
 header .header-content {
     position: relative;
     width: 100%;
-    padding: 100px 15px;
+    padding: 1rem  1.5rem;
     text-align: center;
     z-index: 2;
 }
@@ -408,7 +438,6 @@ header .header-content {
 
 .inner h1 {
    font-size: 28px;
-
  }
 @media (min-width: 768px){
      .inner h1 {
@@ -426,8 +455,8 @@ header .header-content {
       max-width: 50% ;
       padding: 0;
       margin: 0 auto;
-      margin-top: 40px;
-      margin-bottom: 50px;
+      margin-top: 10px;
+      margin-bottom: 10px;
       font-size: 16px;
       font-weight: 100;
       color: #fff;
@@ -605,7 +634,7 @@ textarea {
     padding-right: 0;
     padding-left: 0;
 }*/
-
+/*
 .btn-default {
 border-top-right-radius: 5px !important;
 border-bottom-right-radius: 5px !important;
@@ -616,10 +645,8 @@ width : 10rem ;
     background-color: #f23754;
     color : #fff;
     margin-left: 1rem !important;
-    /*-webkit-transition: all .35s;
-    -moz-transition: all .35s;
-    transition: all .35s;*/
-}
+
+}*/
 
 /*.btn-default:hover,
 .btn-default:focus,
@@ -699,11 +726,12 @@ fieldset[disabled] .btn-default.active {
     background-color: #f23754 !important;
     border: 1px solid #e70f31 !important;
   }
-.btn {
+/*.btn {
     border: 0;
     border-radius: 6px;
     font-family: 'Helvetica Neue',Arial,sans-serif;
-}
+}*/
+
 .btn-lg{
   font-size : 1.3rem;
 }
@@ -798,6 +826,99 @@ img::-moz-selection {
       font-size: 20px;
       margin-top:1.5rem !important;
 }
+
+/* Movie range slider css*/
+input[type=range] {
+  height: 26px;
+  -webkit-appearance: none;
+  margin: 10px 0;
+  width: 100%;
+}
+input[type=range]:focus {
+  outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 14px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: 1px 1px 1px #50555C;
+  background: #50555C;
+  border-radius: 14px;
+  border: 0px solid #000000;
+}
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 0px 0px 0px #000000;
+  border: 0px solid #000000;
+  height: 20px;
+  width: 40px;
+  border-radius: 12px;
+  background: #f23754;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -3px;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #50555C;
+}
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 14px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: 1px 1px 1px #50555C;
+  background: #50555C;
+  border-radius: 14px;
+  border: 0px solid #000000;
+}
+input[type=range]::-moz-range-thumb {
+  box-shadow: 0px 0px 0px #000000;
+  border: 0px solid #000000;
+  height: 20px;
+  width: 40px;
+  border-radius: 12px;
+  background: #f23754;
+  cursor: pointer;
+}
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 14px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+  background: #50555C;
+  border: 0px solid #000000;
+  border-radius: 28px;
+  box-shadow: 1px 1px 1px #50555C;
+}
+input[type=range]::-ms-fill-upper {
+  background: #50555C;
+  border: 0px solid #000000;
+  border-radius: 28px;
+  box-shadow: 1px 1px 1px #50555C;
+}
+input[type=range]::-ms-thumb {
+  margin-top: 1px;
+  box-shadow: 0px 0px 0px #000000;
+  border: 0px solid #000000;
+  height: 20px;
+  width: 40px;
+  border-radius: 12px;
+  background: #f23754;
+  cursor: pointer;
+}
+input[type=range]:focus::-ms-fill-lower {
+  background: #50555C;
+}
+input[type=range]:focus::-ms-fill-upper {
+  background: #50555C;
+}
+
+/* END OF Movie range slider css*/
 
 
 .url-submit {
@@ -1096,9 +1217,10 @@ height: 20px;
   font-size: 1.5rem !important;
 }
 
-.report_title {
-  text-align: center;
+.no-float {
+  float : none !important;
 }
+
 .signinBTN-verification-message {
   background-color: #f23754;
   color : #fff;
@@ -1121,6 +1243,20 @@ height: 20px;
   width : 9rem ;
       background-color: #f23754;
       margin-left: 1rem !important;
+      padding : 1rem;
+}
+
+.report-tool-box {
+  position : absolute;
+  top : 50%;
+  right:0;
+  border-top-right-radius: 2px !important;
+  border-bottom-right-radius: 2px !important;
+  border-bottom-left-radius: 2px !important;
+  border-top-left-radius: 2px !important;
+  height : 5rem ;
+  width : 20rem ;
+      background-color: transparent;
       padding : 1rem;
 }
 
@@ -1356,13 +1492,13 @@ background-color: #212121;
 .footer-text-left {
   color : #fff;
   text-align: left;
-  padding-top : 0;
+  padding-top : 1.7rem;
 
 }
 .footer-text-right {
   color : #fff;
   text-align: right;
-  padding-top : 0;
+  padding-top : 1.7rem;
 
 }
 }

@@ -16,7 +16,7 @@ import {bindActionCreators} from 'redux';
 <div>
 <Menu />
     {this.props.children}
-{/*<Footer /> */}
+<Footer /> 
 </div>
 
 
