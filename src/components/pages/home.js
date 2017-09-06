@@ -46,7 +46,7 @@ render(){
         <Panel header={newDate}>
 
           <Link to={'detail/' + poll.url.split("/").pop()}>{title}</Link>
-          <p style={{color:"#111"}}><small>Choice : {choices}</small></p>
+          <p style={{color:"#111"}}><small>Choices : {choices}</small></p>
         </Panel>
       </Col>
     );

@@ -10,6 +10,8 @@ import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import home  from './components/pages/home';
 import detail from './components/pages/detail';
+import submit from './components/pages/submitPoll';
+
 import Main from  './main';
 
 
@@ -23,6 +25,8 @@ const Routes = (
     <Route path="/" component={Main}>
       <IndexRoute component={home}/>
       <Route path="detail/:id" component={detail} />
+        <Route path="submit" component={submit} />
+
       <Route path="*" component={home} />
     </Route>
   </Router>

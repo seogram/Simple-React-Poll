@@ -6,7 +6,7 @@
   },
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=production forever ./index.js",
+    "start": "forever ./bin/www",
     "watch": "webpack",
     "build": "webpack -p --config ./webpack.config.prod.js",
     "test": "echo test"
@@ -69,7 +69,7 @@
     "redux-logger": "^3.0.6",
     "webpack": "^3.5.5"
   },
-  "main": "index.js",
+  "main": "bin/www",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/seogram/react.git"
